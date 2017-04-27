@@ -1,0 +1,673 @@
+
+
+
+
+
+$(document).on('touchmove',function(e){
+	e.preventDefault();
+});
+
+//音频
+AudioFX = function() {
+    var f = "0.4.0";
+    var c = false,
+        e = document.createElement("audio"),
+        a = function(j) {
+            var i = e.canPlayType(j);
+            return (i === "probably") || (i === "maybe")
+        };
+    if (e && e.canPlayType) {
+        c = {
+            ogg: a('audio/ogg; codecs="vorbis"'),
+            mp3: a("audio/mpeg;"),
+            m4a: a("audio/x-m4a;") || a("audio/aac;"),
+            wav: a('audio/wav; codecs="1"'),
+            loop: (typeof e.loop === "boolean")
+        }
+    }
+    var d = function(m, i, l) {
+        var k = document.createElement("audio");
+        if (l) {
+            var j = function() {
+                k.removeEventListener("canplay", j, false);
+                l()
+            };
+            k.addEventListener("canplay", j, false)
+        }
+        if (i.loop && !c.loop) {
+            k.addEventListener("ended", function() {
+                k.currentTime = 0;
+                k.play()
+            }, false)
+        }
+        k.volume = i.volume || 0.1;
+        k.autoplay = i.autoplay;
+        k.loop = i.loop;
+        k.src = m;
+        return k
+    };
+    var h = function(i) {
+        for (var j = 0; j < i.length; j++) {
+            if (c && c[i[j]]) {
+                return i[j]
+            }
+        }
+    };
+    var g = function(i) {
+        var k, j;
+        for (k = 0; k < i.length; k++) {
+            j = i[k];
+            if (j.paused || j.ended) {
+                return j
+            }
+        }
+    };
+    var b = function(o, j, m) {
+        j = j || {};
+        var i = j.formats || [],
+            l = h(i),
+            k = [];
+        o = o + (l ? "." + l : "");
+        if (c) {
+            for (var p = 0; p < (j.pool || 1); p++) {
+                k.push(d(o, j, p == 0 ? m : null))
+            }
+        } else {
+            m()
+        }
+        return {
+            audio: (k.length == 1 ? k[0] : k),
+            play: function() {
+                var n = g(k);
+                if (n) {
+                    n.play()
+                }
+            },
+            stop: function() {
+                var r, q;
+                for (r = 0; r < k.length; r++) {
+                    q = k[r];
+                    q.pause();
+                    q.currentTime = 0
+                }
+            }
+        }
+    };
+    b.version = f;
+    b.supported = c;
+    return b
+}();
+
+var musicbg = AudioFX('img/sounds/mu00', {
+    formats: ['mp3'],
+    volume: 1,
+    loop: true
+});
+musicbg.play();
+
+
+//    图片
+    var _loIndex = 0;
+    var loadArr=["img/bj.jpg","img/loding.png","img/logo.png","img/hand01.png","img/hand02.png","img/pa01.png","img/pa02.png","img/pa03.png","img/scene01_1.png","img/scene01_2.png","img/scene01_3.png","img/scene01_4.png","img/scene01_5.png","img/scene01_6.png","img/scene01_7.png","img/scene01_8.png","img/scene01_9.png","img/scene01_10.png","img/scene01_11.png","img/scene01_12.png","img/scene01_start.png","img/scene01_02.png","img/scene03_btn.png","img/scene03_img01.png","img/scene03_img02.png","img/scene03_img03.png","img/scene03_img04.png","img/scene03_img05.png","img/scene03_img06.png","img/scene03_img07.png","img/scene03_img08.png","img/scene03_tit01.png","img/scene03_tit02.png","img/scene03_tit03.png","img/scene03_tit04.png","img/scene04_01.png","img/scene04_02.png","img/scene04_03.png","img/scene04_04.png","img/scene04_05.png","img/scene04_06.png","img/scene04_07.png","img/scene04_08.png","img/scene04_again.png","img/scene04_share.png","img/font_top.png","img/share.png"];
+    for(var i in loadArr){
+        _loIndex++;
+    }
+    var myNum=0;
+    var sen01Nb = 1;
+	var TimerScene01;
+    for (var i = 0; i < loadArr.length; i++) {
+        var nImg=new Image();
+        nImg.src=loadArr[i]
+        nImg.onload=function(){
+            myNum++;
+            $('.game_loNumb').html(parseInt((myNum/_loIndex)*100) + "%");
+
+            if(myNum == 45){
+                $(".loding").hide();
+                $("#scnene01_wp").show();
+
+				TimerScene01 = setInterval(function(){
+					$scene01_box01_IMG.hide();
+					$('#scene01_'+ sen01Nb).show();
+					sen01Nb++;
+					if(sen01Nb >= 13) sen01Nb = 1;
+				},80)
+            }
+        }
+    };
+
+
+
+
+
+
+
+
+var $share_box = $('#share_box');
+var $scene01_start = $('#scene01_start');
+var $scnene01_wp = $('#scnene01_wp');
+var $scene01_box01_IMG = $('#scene01_box01').find('img');
+
+var $pa01 = $('#pa01');
+var $scene02_main = $('#scene02_main');
+var $pa03_btn = $('#pa03_btn');
+var $scnene02_wp = $('#scnene02_wp');
+var $animation1 = $('#animation1');
+var $animation2 = $('#animation2');
+var $animation3 = $('#animation3');
+var $animation4 = $('#animation4');
+var $animation5 = $('#animation5');
+var $animation6 = $('#animation6');
+var $animation7 = $('#animation7');
+var $animation8 = $('#animation8');
+var animat_speed = 500;
+var animat_speed2 = 200;
+var spriteL;
+var spriteT;
+var animate_ov_sp = 100;
+var animate_ov_index = 1;
+var $pa_animation = $('.pa_animation');
+var pa_animation_bl = false;
+var pa_animation_bl2 = false;
+var $animationOv = $('.animationOv');
+var $hand02 = $('.hand02');
+
+// scene03/scene04
+var $scnene03_wp = $('#scnene03_wp');
+var $scene03_con_IMG = $('#scene03_con').find('img');
+var $scnene04_wp = $('#scnene04_wp');
+var $scene03_btn = $('#scene03_btn');
+var $scene03_box = $('#scene03_box');
+
+var $scnene04_wp = $('#scnene04_wp');
+var $scnene04_img = $('.scnene04_img');
+var $scene04_again = $('#scene04_again');
+var $scene04_share = $('#scene04_share');
+var $share_box = $('#share_box');
+var $font_top = $('#font_top');
+
+var $scnene04_tit_img = $('.scnene04_tit_img');
+var $scene02_logo = $('#scene02_logo');
+
+
+
+// tit
+var $scene03_tit01 = $('#scene03_tit01');
+var $scene03_tit02 = $('#scene03_tit02');
+var $scene03_tit03 = $('#scene03_tit03');
+var $scene03_tit04 = $('#scene03_tit04');
+
+$pa03_btn.on('click',function(){
+	pa();
+	$(this).fadeOut(100);
+	// $scene02_logo.show();
+
+})
+
+
+$scene01_start.on('click',function(){
+	$scnene02_wp.fadeIn(100,function(){
+		$scnene01_wp.hide();
+		clearInterval(TimerScene01);
+		
+	})
+})
+
+
+// 分享
+$scene04_share.on('click',function(){
+	$share_box.show();
+})
+$share_box.on('click',function(){
+	$(this).hide();	
+})
+
+$scene04_again.on('click',function(){
+	$scnene02_wp.show();
+	$scnene04_wp.fadeOut();	
+	// // $scene03_tit01.hide();
+	$scene03_tit01.css({'opacity':0,'top':'-150px'});
+	// // $scene03_tit02.show();
+	$scene03_tit02.css({'opacity':0,'top':'-80px'});
+	// // $scene03_tit03.show();
+	$scene03_tit03.css({'opacity':0,'top':'-178px'});
+	// // $scene03_tit04.show();
+	$scene03_tit04.css({'opacity':0,'top':'-75px'});
+})
+
+
+
+
+
+
+// share
+$scene04_share.on('click',function(){
+	$share_box.show();
+})
+
+$share_box.on('click',function(){
+	$(this).hide();
+
+})
+
+
+
+
+
+
+function pa(){
+	var animet_numb = 0;
+	// $pa01.get(0).style.webkitTransition='all '+_su/1000+'s';
+	$pa01.addClass('scnee02_ro');
+	$pa01.css({
+		'opacity': 0
+	});
+	setTimeout(function(){
+
+		$scene02_main.fadeIn(300,function(){
+			// $animation1.addClass('pa_animation01');
+			// $animation2.addClass('pa_animation02');
+			// $animation3.addClass('pa_animation03');
+			// $animation4.addClass('pa_animation04');
+			// $animation5.addClass('pa_animation05');
+			// $animation6.addClass('pa_animation06');
+			// $animation7.addClass('pa_animation07');
+			// $animation8.addClass('pa_animation08');
+
+			// 初始赋值
+			spriteL = $animation1.offset().left;
+			spriteT = $animation1.offset().top;
+			
+
+
+			var _xxxx= 1;
+			var TimerAnimat = setInterval(function(){
+				
+				if(_xxxx>=9){
+					_xxxx = 1;
+					animet_numb++;
+				}
+				Rand(eval('$animation'+_xxxx));
+				_xxxx++;
+				// for (var i = 1; i <= 8; i++) {
+				// 	Rand(eval('$animation'+i));
+				// };
+				// Rand($animation8);
+				
+				if(animet_numb >= 5){
+					clearInterval(TimerAnimat);
+					animet_numb = 0;
+					setTimeout(function(){
+						var TimerAnimatOv = setInterval(function(){
+
+						switch(animate_ov_index)
+						{
+						case 1:
+							$animation1.animate({
+							  	rotate: '0deg', translate: '0px,0px'
+							}, animat_speed2, 'ease-out');
+						  break;
+						case 2:
+							$animation2.animate({
+							  	rotate: '0deg', translate: '0px,0px'
+							}, animat_speed2, 'ease-out');
+						  break;
+						case 3:
+							$animation3.animate({
+							  	rotate: '0deg', translate: '0px,0px'
+							}, animat_speed2, 'ease-out');
+						  break;
+						case 4:
+							$animation4.animate({
+							  	rotate: '0deg', translate: '0px,0px'
+							}, animat_speed2, 'ease-out');
+						  break;
+						case 5:
+							$animation5.animate({
+							  	rotate: '0deg', translate: '0px,0px'
+							}, animat_speed2, 'ease-out');
+						  break;
+						case 6:
+							$animation6.animate({
+							  	rotate: '0deg', translate: '0px,0px'
+							}, animat_speed2, 'ease-out');
+						  break;
+						case 7:
+							$animation7.animate({
+							  	rotate: '0deg', translate: '0px,0px'
+							}, animat_speed2, 'ease-out');
+						  break;
+						case 8:
+							$animation8.animate({
+								rotate: '0deg', translate: '0px,0px'
+							}, animat_speed2, 'ease-out',function(){
+								setTimeout(function(){
+								 	opKa();
+									setTimeout(function(){
+										$pa_animation.animate({
+										  	rotate: '0deg', translate: '0px,0px'
+										}, 200, 'ease-out',function(){
+											var _Tes = 100;
+											setTimeout(function(){
+												opKa();
+											},_Tes)
+											setTimeout(function(){
+												$font_top.fadeIn(200,function(){
+													$hand02.animate({
+													  	top:'-180%'
+													}, 800, 'ease-out',function(){
+														var _Time = 200;
+														$hand02.fadeOut(_Time,function(){
+															$hand02.fadeIn(_Time,function(){
+																$hand02.fadeOut(_Time,function(){
+																	$hand02.fadeIn(_Time,function(){
+																		$hand02.fadeOut(_Time,function(){
+																			$hand02.fadeIn(_Time,function(){
+																				$hand02.fadeOut(_Time,function(){
+																					$hand02.fadeIn(_Time,function(){
+																						$hand02.fadeOut(_Time,function(){
+																							pa_animation_bl = true;
+																							pa_animation_bl2 = true;
+																							$(document).unbind("touchmove");
+																						})
+																					})
+																				})
+																			})
+																		})
+																	})
+																})
+															})
+														})
+															
+													});
+												});
+											},animat_speed+100+_Tes);
+										});
+									},animat_speed+100);
+								},50)
+
+							});
+						  break;
+						default:
+						  alert('页面错误');
+						}
+						animate_ov_index++;
+						if(animate_ov_index > 8) clearInterval(TimerAnimatOv);
+					},animate_ov_sp)
+					}, 500)
+					
+				}
+			},100);
+
+
+			
+			// 随机生成卡片
+			function Rand(obj){
+				var _x = Math.floor(Math.random()*361);
+				var _L = Math.floor(Math.random()* ($scnene02_wp.width() - $animation1.width() - 100) - (spriteL-100));
+				var _T = Math.floor(Math.random()* ($scnene02_wp.height() - $animation1.height() - 300 ) - (spriteT - 200));
+				// var _L2 = _L - 100;
+				// var _T2 = _T - 200;
+				obj.animate({
+					translate: _L+'px,'+_T+'px',rotate: _x+"deg"
+				}, animat_speed, 'ease-out');
+			}
+
+
+		});
+	}, 400);
+}
+
+// 打开卡片
+function opKa(){
+	$animation1.animate({
+	  	rotate: '-55deg', translate: '-131px,-150px'
+	}, animat_speed2, 'ease-out');
+
+ 	$animation2.animate({
+	  	rotate: '-40deg', translate: '-87px,-116px'
+	}, animat_speed2, 'ease-out');
+
+	$animation3.animate({
+	  	rotate: '-25deg', translate: '-45px,-91px'
+	}, animat_speed2, 'ease-out');
+
+	$animation4.animate({
+	  	rotate: '-10deg', translate: '-1px,-71px'
+	}, animat_speed2, 'ease-out');
+
+	$animation5.animate({
+	  	rotate: '5deg', translate: '43px,-64px'
+	}, animat_speed2, 'ease-out');
+
+	$animation6.animate({
+	  	rotate: '20deg', translate: '91px,-77px'
+	}, animat_speed2, 'ease-out');
+
+	$animation7.animate({
+	  	rotate: '35deg', translate: '134px,-103px'
+	}, animat_speed2, 'ease-out');
+
+	$animation8.animate({
+	  	rotate: '50deg', translate: '161px,-144px'
+	}, animat_speed2, 'ease-out');
+}
+
+
+
+
+var _numb;
+var _indexBl;
+// $pa_animation.on('click',function(){
+	// pa_animation_bl = true;
+	// $pa_animation.unbind("touchstart");
+	// $pa_animation.unbind("touchmove");
+	// if(!pa_animation_bl2) return;
+	// $(document).unbind("touchmove");
+	// var _self = $(this);	
+	// $pa_animation.animate({
+	// 	top:'0%'
+	// }, 100, 'ease-out')
+
+	// _self.animate({
+	// 	top:'-10%'
+	// }, 100, 'ease-out',function(){
+
+	$pa_animation.on('touchstart',function(e){
+
+		if(!pa_animation_bl) return;
+		var _self = $(this);
+		var oEvent=e||window.event;
+		preventDefault(oEvent);
+	
+		// console.log(oEvent);
+		_numb = oEvent.touches[0].pageY;
+		// alert(_numb);
+		_indexBl = true;
+		$(this).on('touchmove',function(e){
+			var oEvent=e||window.event;
+			preventDefault(oEvent);
+			// var _self = $(this);
+			var _index = _numb - oEvent.touches[0].pageY;
+			
+			if(_index > 20 ){
+				if(!_indexBl){
+					// console.log('ov')
+					return;
+				} 
+				$(document).on('touchmove',function(e){
+					e.preventDefault();
+				});
+				_indexBl = false;
+				pa_animation_bl = false;
+				pa_animation_bl2 = false;
+				console.log(_indexBl);
+				_self.removeClass('animationOv');
+				$font_top.fadeOut(200);
+				_self.animate({
+					top:'-50%'
+				}, 500, 'ease-out',function(){
+					
+
+					$('.animationOv').fadeOut(200,function(){
+						console.log(1);
+						_self.animate({
+							translate: '0px,0px',rotate:"0deg"
+						}, 500,function(){
+							// _self.animate({
+							// 	rotateY:'180deg'
+							// 	// ,opacity:0
+							// }, 800,'ease-out')
+							setTimeout(function(){
+								_self.animate({
+								  	rotateY:'180deg',opacity:0,scale:2.5,top:0
+								}, 800, 'ease-out',function(){
+									var _showindex = _.Linshuffle([1,2,3,4,5,6,7,8])[0];
+									$scene03_con_IMG.hide();
+									$('#scene03_img0'+_showindex).show();
+
+									$scnene03_wp.show(100,function(){
+										$scnene02_wp.hide();
+											scene03Tit();
+										// $scene03_box.show(1000,function(){
+											$hand02.css({'top':'130%'});
+											$hand02.fadeIn();
+
+
+											// 重置
+											// $scene02_logo.hide();
+											animate_ov_index = 1;
+											$scene02_main.fadeOut(10);
+											$pa01.removeClass('scnee02_ro');
+											$pa01.css({
+												'opacity': 1
+											});
+											$pa03_btn.fadeIn(100);
+											$pa_animation.addClass('animationOv');
+											$animationOv.fadeIn(0);
+											$pa_animation.animate({
+											  	rotate: '0deg', translate: '0px,0px',opacity:1,top:0
+											}, 10, 'ease-out');
+											_self.animate({
+											  	rotateY:'0deg',opacity:1,scale:1
+											}, 10, 'ease-out');
+											$scene03_btn.on('click',function(){
+												$scnene04_img.hide();
+												$scnene04_tit_img.addClass('dn');
+												$scnene04_tit_img.css({
+														'marginLeft':'100%'
+													})
+												$('#scnene04_img0' + _showindex).show();
+												$('#scnene04_tit_img0' + _showindex).removeClass('dn');
+												// share
+												// alert(_showindex);
+												switch(_showindex)
+												{
+												case 1:
+												   	weixin.share('我的“啪”牌【健康长受】今年要长受了吗……我的攻在哪里……','http://wechat.palm-h.com/h5/papa/jssdk/logo01.jpg');
+												 	break;
+												case 2:
+												   	weixin.share('我的“啪”牌【出入平安】这么说，我可以放心了？','http://wechat.palm-h.com/h5/papa/jssdk/logo02.jpg');
+													break;
+												case 3:
+												   	weixin.share('我的“啪”牌【天天向上】哈哈哈天天都向上！！还有谁！','http://wechat.palm-h.com/h5/papa/jssdk/logo03.jpg');
+													break;
+												case 4:
+												   weixin.share('我的“啪”牌【持久迎新】久得根本停不下来~','http://wechat.palm-h.com/h5/papa/jssdk/logo04.jpg');
+													break;
+												case 5:
+													weixin.share('我的“啪”牌【大吉大力】到底是要有多用力……','http://wechat.palm-h.com/h5/papa/jssdk/logo05.jpg');
+												  	break;	
+												case 6:
+													weixin.share('我的“啪”牌【万射如意】看着好像很厉害的样子……','http://wechat.palm-h.com/h5/papa/jssdk/logo06.jpg');
+												  	break;	
+												case 7:
+													weixin.share('我的“啪”牌【桃花多多】神助我今年不要再光棍！','http://wechat.palm-h.com/h5/papa/jssdk/logo07.jpg');
+												  	break;	
+												case 8:
+													weixin.share('我的“啪”牌【欢舔喜地】我假装看不懂~嘿嘿嘿','http://wechat.palm-h.com/h5/papa/jssdk/logo08.jpg');
+												  	break;
+												default:
+												  weixin.share('啪仙拜年，2016你是什么啪啪运？','http://wechat.palm-h.com/h5/papa/jssdk/logo.jpg');
+												}
+												$scnene04_wp.fadeIn(100,function(){
+													$scnene03_wp.hide();
+													$('#scnene04_tit_img0' + _showindex).css({
+														'marginLeft':'0%'
+													})
+													// _indexBl = true;
+													// $scene03_box.fadeOut(0);
+												})
+											})
+										// });
+									});
+								});
+							},500)
+
+						})
+					});
+				});
+
+			}
+			console.log(_index);
+		})
+		
+	});
+	// })
+// })
+
+
+
+
+
+
+
+
+
+
+
+
+// $pa_animation.on('touchup',function(e){
+// 	_numb = 0;
+// })
+
+
+
+
+// 彩带
+function scene03Tit(){
+
+	$scene03_tit01.show();
+	$scene03_tit01.css({'opacity':1,'top':'-5px'});
+	$scene03_tit02.show();
+	$scene03_tit02.css({'opacity':1,'top':'200px'});
+	$scene03_tit03.show();
+	$scene03_tit03.css({'opacity':1,'top':'120px'});
+	$scene03_tit04.show();
+	$scene03_tit04.css({'opacity':1,'top':'300px'});
+
+
+	setTimeout(function(){
+		// $scene03_tit01.hide();
+		$scene03_tit01.css({'opacity':0});
+		// $scene03_tit02.show();
+		$scene03_tit02.css({'opacity':0});
+		// $scene03_tit03.show();
+		$scene03_tit03.css({'opacity':0});
+		// $scene03_tit04.show();
+		$scene03_tit04.css({'opacity':0});
+	},800)
+
+
+}
+
+
+
+function preventDefault(oEvent){
+	if(oEvent.preventDefault){
+		oEvent.preventDefault();
+	}
+	else{
+		oEvent.returnValue=false;
+	}
+}
