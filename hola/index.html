@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>try</title>
+</head>
+<style type="text/css">
+    html{
+        font-size:3rem;
+    }
+    .wrap{
+        width:80%;
+        height:80%;
+        margin:10%;
+        border:2px dashed black;
+    }
+    .teamblue{
+        width:1.3rem;
+        height:1.3rem;
+        margin:40% auto;
+        background: url(1.png) no-repeat;
+        -webkit-background-size: 100%;
+        background-size: 100%;
+        position: relative;
+    }
+    .teamblue::before{
+        position: absolute;
+        top:0;
+        left:0;
+        bottom:0;
+        right:0;
+        content: '';
+        z-index: 999;
+        margin:-1%;
+        color:red;
+        /*用box-shadow来表示线宽度*/
+        box-shadow:inset 0 0 0 2px;
+        border-radius: 2%;
+        /*-ms-animation: clipMe 4s linear infinite;*/
+        /*-moz-animation: clipMe 4s linear infinite;*/
+        /*-m-animation: clipMe 4s linear infinite;*/
+        -webkit-animation: clipMe 4s linear infinite;
+        animation: clipMe 4s linear infinite;
+    }
+    @-webkit-keyframes clipMe {
+        /*上线*/
+        0%,100%{
+            clip: rect(0rem,1.43rem,0.2rem,0rem);
+        }
+        /*左线*/
+        25% {
+             clip:rect(0rem,0.2rem,1.43rem,0rem);
+        }
+        /*下线*/
+        50% {
+            clip: rect(1.23rem,1.43rem,1.43rem,0rem);
+        }
+        /*右线*/
+        75%{
+            clip: rect(0rem,1.43rem,1.43rem,1.25rem);
+        }
+    }
+    @keyframes clipMe {
+        /*上线*/
+        0%,100%{
+            clip: rect(0rem,1.43rem,0.2rem,0rem);
+        }
+        /*左线*/
+        25% {
+            clip:rect(0rem,0.2rem,1.43rem,0rem);
+        }
+        /*下线*/
+        50% {
+            clip: rect(1.23rem,1.43rem,1.43rem,0rem);
+        }
+        /*右线*/
+        75%{
+            clip: rect(0rem,1.43rem,1.43rem,1.25rem);
+        }
+    }
+</style>
+<body>
+    <div class="wrap">
+        <div class="teamblue"></div>
+    </div>
+</body>
+</html>
