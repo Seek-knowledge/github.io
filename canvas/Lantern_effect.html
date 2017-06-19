@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>canvas_size_controll</title>
+</head>
+<style type="text/css">
+    .wrap2{
+        width:100px;
+        height:100px;
+        position: relative;
+    }
+    img{
+        height:100px;
+        width:100px;
+        position: absolute;
+        top: 1px;
+        left: 1px;
+    }
+</style>
+<body>
+    <div class="wrap2">
+        <canvas class="canvas_noes" style=""></canvas>
+        <img src="1.png" alt="">
+    </div>
+    <!--
+    canvas自定义大小的时候,会按照默认大小:300*150 来进行缩放.
+    ,所以我们绘制正方形的时候,总会显示 一个 长方形
+    -->
+    <div class="wrap">
+        <!-- 自定义大小 -->
+        <!-- Equal_scale 系列-->
+        <!-- 1.在 行内样式里进行设置 , 默认还是进行缩放 操作 -->
+        <canvas class="canvas_es1" style="height: 400px;width: 300px;border: 1px solid black;"></canvas>
+        <!-- 2, 外部样式 , canvas画布还是 进行 页面的 缩放 -->
+        <canvas class="canvas_es2"></canvas>
+    </div>
+
+</body>
+<script type="text/javascript">
+    var ctx_es1=document.getElementsByClassName("canvas_es1")[0].getContext("2d")
+    ctx_es1.fillStyle="red";
+    ctx_es1.fillRect(0, 0, 100, 100)
+
+    // 改变canva默认大小,不再 等比缩放
+    var canvas_noes=document.getElementsByClassName("canvas_noes")[0]
+    var ctx_noes=document.getElementsByClassName("canvas_noes")[0].getContext("2d");
+    canvas_noes.width="100";canvas_noes.height="100";
+    // ctx_noes.fillStyle="skyblue";ctx_noes.setLineDash([50,50])
+    // ctx_noes.fillRect(0, 0, 100, 100)
+    // ctx_noes.strokeRect(0, 0, 100, 100)
+
+    var offsetnum=0;
+    function draw(offsetnum){
+        ctx_noes.clearRect(0, 0, canvas_noes.width, canvas_noes.height);
+        ctx_noes.setLineDash([50,50]);ctx_noes.fillStyle="skyblue";
+        ctx_noes.lineDashOffset=offsetnum;
+        ctx_noes.strokeRect(0, 0, canvas_noes.width, canvas_noes.height)
+    }
+    function march(){
+        offsetnum++;
+        console.log(offsetnum)
+        // console.log(offsetnum)
+        // if(offsetnum>50){
+        //     offsetnum=0;
+        // }
+        draw(offsetnum);
+        setTimeout(march, 20)
+    }
+    march()
+</script>
+</html>
